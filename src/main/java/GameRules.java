@@ -22,17 +22,19 @@ public class GameRules implements Player {
         }
     }
 
-    private GameState win(int x, int y) {
+    private GameState win(int row, int column) {
         char[][] board = new char[boardSize][boardSize];
         int playerTotal = lastPlayer * boardSize;
         char horizontal, vertical, diagonal1, diagonal2;
         horizontal = vertical = diagonal1 = diagonal2 = ' ';
+
         for (int i = 0; i < boardSize; i++) {
-            horizontal += board[i][y - 1];
-            vertical += board[x - 1][i];
+            horizontal += board[i][column - 1];
+            vertical += board[row - 1][i];
             diagonal1 += board[i][i];
             diagonal2 += board[i][boardSize - i - 1];
         }
+
         if (horizontal == playerTotal
                 || vertical == playerTotal
                 || diagonal1 == playerTotal
