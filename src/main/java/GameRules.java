@@ -13,20 +13,20 @@ public class GameRules implements Player {
         board.pieceOutOfBounds();
         board.markBox(lastPlayer);
 
-        if (isWin(row, column) == GameState.WIN) {
+        if (win(row, column) == GameState.WIN) {
             return GameState.WIN;
-        } else if (isDraw() == GameState.DRAW) {
+        } else if (draw() == GameState.DRAW) {
             return GameState.DRAW;
         } else {
             return GameState.NO_WIN;
         }
     }
 
-    private GameState isWin(int x, int y) {
+    private GameState win(int x, int y) {
         char[][] board = new char[boardSize][boardSize];
         int playerTotal = lastPlayer * boardSize;
         char horizontal, vertical, diagonal1, diagonal2;
-        horizontal = vertical = diagonal1 = diagonal2 = '\0';
+        horizontal = vertical = diagonal1 = diagonal2 = ' ';
         for (int i = 0; i < boardSize; i++) {
             horizontal += board[i][y - 1];
             vertical += board[x - 1][i];
@@ -42,7 +42,7 @@ public class GameRules implements Player {
         return GameState.PLAYING;
     }
 
-    private GameState isDraw() {
+    private GameState draw() {
         char[][] board = new char[boardSize][boardSize];
         for (int row = 0; row < boardSize; row++) {
             for (int column = 0; column < boardSize; column++) {
