@@ -3,7 +3,7 @@ public class Game {
     private Board board;
 
     public Game() {
-        board = new Board();
+        board = new Board(3);
     }
 
     public GameState play() {

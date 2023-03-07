@@ -12,7 +12,7 @@ public class BoardTest {
 
     @BeforeEach
     void setUp() {
-        board = new Board();
+        board = new Board(3);
     }
 
     @Test
@@ -23,19 +23,19 @@ public class BoardTest {
     @Test
     public void shouldThrowPieceOutOfBoundsExceptionWhenRowIsPlacedOffBoard() {
         assertThrows(PieceOutOfBoundsException.class, () ->
-                new Board().markBox('O', 4, 2));
+                board.markBox('O', 4, 2));
     }
 
     @Test
     public void shouldThrowPieceOutOfBoundsExceptionWhenNegativeNumber() {
         assertThrows(PieceOutOfBoundsException.class, () ->
-                new Board().markBox('O', -1, -2));
+                board.markBox('O', -1, -2));
     }
 
     @Test
     public void shouldThrowPieceOutOfBoundsExceptionWhenColumnIsPlacedOffBoard() {
         assertThrows(PieceOutOfBoundsException.class, () ->
-                new Board().markBox('X', 1, 4));
+               board.markBox('X', 1, 4));
     }
 
     @Test

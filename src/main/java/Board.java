@@ -7,13 +7,15 @@ import java.util.Set;
 
 public class Board {
 
-    private final int boardSize = 3;
+    private final int boardSize;
     private int occupiedBoxes;
 
     private char[][] board = new char[boardSize][boardSize];
+
     private Set<String> validCells = new HashSet<>();
 
-    public Board() {
+    public Board(int boardSize) {
+        this.boardSize = boardSize;
         for (int row = 0; row < this.boardSize; row++) {
             for (int column = 0; column < this.boardSize; column++) {
                 board[row][column] = ' ';
