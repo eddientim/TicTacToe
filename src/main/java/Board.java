@@ -1,4 +1,5 @@
 import exceptions.BoxOccupiedException;
+import exceptions.InvalidPieceException;
 import exceptions.PieceOutOfBoundsException;
 
 import java.util.HashSet;
@@ -16,13 +17,14 @@ public class Board {
         for (int row = 0; row < this.boardSize; row++) {
             for (int column = 0; column < this.boardSize; column++) {
                 board[row][column] = ' ';
-                validCells.add(row+""+column);
+                validCells.add(row + "" + column);
             }
         }
     }
 
     public boolean markBox(char playerMark, int row, int column) {
         pieceOutOfBounds(row, column);
+        validatePieces(playerMark);
 
         if (board[row][column] != ' ') {
             throw new BoxOccupiedException("Box already occupied.");
@@ -33,18 +35,35 @@ public class Board {
         return true;
     }
 
+    public GameState drawGame() {
+        if (boardSize * boardSize == occupiedBoxes) {
+            return GameState.DRAW;
+        }
+        return GameState.NO_WINNER;
+    }
+
+    public GameState hasWinner() {
+        if (checkRowsForWinner() || checkColumnsForWinner() || checkDiagonalsForWinner()) {
+            return GameState.WIN;
+        }
+        return GameState.NO_WINNER;
+    }
+
+    private boolean checkDiagonalsForWinner() {
+        return checkFirstDiagonal() || checkSecondDiagonal();
+    }
+
     private void pieceOutOfBounds(int row, int column) {
         if ((row < 0 || row > boardSize) || (column < 0 || column > boardSize)) {
             throw new PieceOutOfBoundsException("Piece is outside board");
         }
     }
 
-    public boolean hasWinner() {
-        return (checkRowsForWinner() || checkColumnsForWinner() || checkDiagonalsForWinner());
-    }
-
-    private boolean checkDiagonalsForWinner() {
-        return checkFirstDiagonal() || checkSecondDiagonal();
+    private boolean validatePieces(char playerMark) {
+        if (playerMark != 'X' && playerMark != 'O') {
+            throw new InvalidPieceException("Invalid piece");
+        }
+        return true;
     }
 
     private boolean checkFirstDiagonal() {

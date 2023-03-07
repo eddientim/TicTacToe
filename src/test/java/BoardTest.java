@@ -1,19 +1,23 @@
 import exceptions.BoxOccupiedException;
+import exceptions.InvalidPieceException;
 import exceptions.PieceOutOfBoundsException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
 
+    private Board board;
+
+    @BeforeEach
+    void setUp() {
+        board = new Board();
+    }
+
     @Test
     public void shouldPlacePieceWithinOnBoard() {
-
-        Board board = new Board();
-
-        boolean actual = board.markBox('O', 1, 2);
-
-        assertTrue(actual);
+        assertTrue(board.markBox('O', 1, 2));
     }
 
     @Test
@@ -36,58 +40,71 @@ public class BoardTest {
 
     @Test
     public void shouldThrowOccupiedExceptionWhenPieceAlreadyExistsInBox() {
-
-        Board board = new Board();
         board.markBox('O', 1, 1);
         assertThrows(BoxOccupiedException.class, () -> board.markBox('X', 1, 1));
     }
 
     @Test
-    public void shouldCheckForRowWin() {
-        Board board = new Board();
+    public void shouldReturnValidPieces() {
+        assertThrows(InvalidPieceException.class, () -> board.markBox('K',1, 2));
+    }
 
-        board.markBox('0',2,0);
-        board.markBox('0',2,1);
-        board.markBox('0',2,2);
+    @Test
+    public void shouldCheckForRowWin() {
+        board.markBox('O', 2, 0);
+        board.markBox('O', 2, 1);
+        board.markBox('O', 2, 2);
 
         board.hasWinner();
-        assertTrue(board.hasWinner());
+        assertEquals(GameState.WIN, board.hasWinner());
     }
 
     @Test
     public void shouldCheckForColumnWin() {
-        Board board = new Board();
 
-        board.markBox('0',0,1);
-        board.markBox('0',1,1);
-        board.markBox('0',2,1);
+        board.markBox('O', 0, 1);
+        board.markBox('O', 1, 1);
+        board.markBox('O', 2, 1);
 
         board.hasWinner();
-        assertTrue(board.hasWinner());
+        assertEquals(GameState.WIN, board.hasWinner());
     }
 
     @Test
     public void shouldCheckForDiagonalWinTopLeftToBottom() {
-        Board board = new Board();
-
-        board.markBox('0',0,0);
-        board.markBox('0',1,1);
-        board.markBox('0',2,2);
+        board.markBox('O', 0, 0);
+        board.markBox('O', 1, 1);
+        board.markBox('O', 2, 2);
 
         board.hasWinner();
-        assertTrue(board.hasWinner());
+        assertEquals(GameState.WIN, board.hasWinner());
     }
 
     @Test
     public void shouldCheckForDiagonalWinTopRightToLeft() {
-        Board board = new Board();
-
-        board.markBox('0',0,2);
-        board.markBox('0',1,1);
-        board.markBox('0',2,0);
+        board.markBox('O', 0, 2);
+        board.markBox('X', 2, 2);
+        board.markBox('O', 1, 1);
+        board.markBox('X', 0, 0);
+        board.markBox('O', 2, 0);
 
         board.hasWinner();
-        assertTrue(board.hasWinner());
+        assertEquals(GameState.WIN, board.hasWinner());
+    }
+
+    @Test
+    public void shouldCheckIfBoardIsFullThenDraw() {
+        board.markBox('O', 0, 0);
+        board.markBox('X', 0, 1);
+        board.markBox('O', 0, 2);
+        board.markBox('X', 1, 0);
+        board.markBox('O', 1, 1);
+        board.markBox('X', 1, 2);
+        board.markBox('O', 2, 0);
+        board.markBox('O', 2, 1);
+        board.markBox('X', 2, 2);
+
+        assertEquals(GameState.DRAW, board.drawGame());
     }
 }
 

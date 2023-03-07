@@ -1,9 +1,7 @@
 public enum GameState {
-    PLAYING("Game in progress"),
     WIN("Winner"),
     DRAW("Draw"),
-    NOT_STARTED("Game not active"),
-    NO_WIN("No winner");
+    NO_WINNER("No winner");
 
     private final String message;
 
